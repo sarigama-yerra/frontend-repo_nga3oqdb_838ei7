@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import Spline from '@splinetool/react-spline';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useMotionTemplate } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 
 const Hero = () => {
@@ -10,7 +10,8 @@ const Hero = () => {
   const titleY = useTransform(scrollYProgress, [0, 1], ['0%', '-30%']);
   const subtitleY = useTransform(scrollYProgress, [0, 1], ['0%', '-40%']);
   const fadeOut = useTransform(scrollYProgress, [0, 0.7, 1], [1, 0.6, 0]);
-  const blurOverlay = useTransform(scrollYProgress, [0, 1], ['0px', '8px']);
+  const blurAmount = useTransform(scrollYProgress, [0, 1], [0, 8]);
+  const filter = useMotionTemplate`blur(${blurAmount}px)`;
 
   return (
     <section ref={ref} className="relative h-[110vh] w-full overflow-hidden bg-black">
@@ -21,7 +22,7 @@ const Hero = () => {
       {/* Frosted gradient overlay for readability (doesn't block the Spline) */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/40 via-black/10 to-black/80" />
 
-      <motion.div style={{ opacity: fadeOut, filter: blurOverlay.to(v => `blur(${v})`) }} className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6">
+      <motion.div style={{ opacity: fadeOut, filter }} className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6">
         <motion.h1 style={{ y: titleY }} className="text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white drop-shadow-2xl">
           FrostByte Energy
         </motion.h1>
